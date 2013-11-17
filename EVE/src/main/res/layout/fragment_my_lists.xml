@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/my_lists_fragment"
+    tools:context=".MainActivity$MyListsFragment" >
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/darker_gray"
+        android:fadeScrollbars="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/textViewNoListas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="sans-serif-thin"
+        android:textStyle="italic"
+        android:textSize="25sp"
+        android:layout_marginTop="70dp"
+        android:text="No hay listas"/>
+
+    <TextView
+        android:id="@+id/textViewCrearLista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="35sp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/eve_clickable_background"
+        android:text="@string/textViewCrearLista"
+        android:clickable="true"/>
+
+
+
+</LinearLayout>

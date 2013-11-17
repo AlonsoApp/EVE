@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:gravity="center"
+    android:background="#ededed"
+    android:orientation="vertical"
+    tools:context=".AuthenticatorActivity$SigninupOneFragment">
+
+    <ImageButton
+        android:id="@+id/imgBtnProfileImage"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/img_profile_holder"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
+
+    <EditText
+        android:id="@+id/editTextSigninupUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:gravity="center_horizontal"
+        android:hint="@string/login_full_name_hint"/>
+
+</LinearLayout>

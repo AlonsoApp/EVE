@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">EVE</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="textViewNoListas">No hay listas</string>
+    <string name="textViewCrearLista">¿Crear una?</string>
+
+    <string name="msg_login_en_curso">Verificando…</string>
+    <string name="msg_password_no_introducida">Introduce una contraseña</string>
+    <string name="msg_username_no_introducido">Introduce un nombre de ususario</string>
+    <string name="msg_email_no_introducido">Introduce tu email</string>
+
+    <string name="action_nuevo">Nuevo</string>
+    <string name="action_buscar">Buscar</string>
+    <string name="action_notificaciones">Notificaciones</string>
+    <string name="action_send_login">Login</string>
+    <string name="action_next">NEXT</string>
+    <string name="action_done">DONE</string>
+
+    <string name="title_section1">Stream</string>
+    <string name="title_section2">Mis Listas</string>
+    <string name="title_section3">Administrar</string>
+    <string name="title_section4">Buscar</string>
+    <string name="title_login">Login</string>
+    <string name="title_signin">Sign Up</string>
+
+    <string name="tag_fragment_my_ists">tag_fragment_my_ists</string>
+    <string name="tag_fragment_login">tag_fragment_login</string>
+    <string name="tag_fragment_portada">tag_fragment_portada</string>
+
+    <string name="label_authenticator_activity">Login</string>
+
+
+    <!-- Errores -->
+    <string name="error_401">Usuario o contraseña incorrectos</string>
+    <string name="error_412">Ya existe una cuenta asociada a ese correo</string>
+    <string name="error_carga_ofertas">Error al cargar ofertas</string>
+
+
+    <string name="login_password_text">Password</string>
+    <string name="login_password_hint">mínimo 8 caracteres</string>
+    <string name="login_email_text">Email</string>
+    <string name="login_email_hint">example@abc.com</string>
+    <string name="login_full_name_hint">Your full name</string>
+
+    <string name="selecciona_cuenta">Selecciona una cuenta</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="btnLogin">Login</string>
+    <string name="btnSigninup">Sign Up</string>
+    <string name="developed_by">Designed and Developed by </string>
+    <string name="inigo_alonso">Iñigo Alonso</string>
+    <string name="tag_fragment_signinup_one">tag_fragment_signinup_one</string>
+    <string name="msg_password_pequenya">Contraseña demasiado pequeña</string>
+    <string name="tag_fragment_signinup_two">tag_fragment_signinup_two</string>
+
+</resources>
