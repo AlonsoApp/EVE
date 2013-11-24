@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class SigninupTwoFragment extends Fragment {
 

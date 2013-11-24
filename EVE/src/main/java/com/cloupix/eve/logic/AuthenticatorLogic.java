@@ -5,11 +5,12 @@ import android.accounts.AccountManager;
 import android.content.Context;
 
 import com.cloupix.eve.authentication.Authenticator;
+import com.cloupix.eve.business.AuthResponse;
 import com.cloupix.eve.business.exceptions.EVEHttpException;
 import com.cloupix.eve.network.GestorComunicacionesREST;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class AuthenticatorLogic
 {
@@ -34,7 +35,7 @@ public class AuthenticatorLogic
     }
 
     // Hace un login del usuario userName y userPass devoliendo (si el login es correcto) el token que le corresponde
-    public String userLogin(String userName, String userPass, String mAuthTokenType) throws EVEHttpException, Exception
+    public AuthResponse userLogin(String userName, String userPass, String mAuthTokenType) throws EVEHttpException, Exception
     {
         GestorComunicacionesREST gcREST = new GestorComunicacionesREST(GestorComunicacionesREST.SERVER_IP, GestorComunicacionesREST.SERVER_PORT_SSL, context);
         return gcREST.userLogin(userName, userPass, mAuthTokenType);
@@ -45,7 +46,7 @@ public class AuthenticatorLogic
      * Si ya existe una cuenta asociada a ese email saltará una EVEHttpException con codigo 412 que se tratará más arriba
      * Si el registro sale bien, actual igual que el login, devuelve el token entregado por el servidor asociado a la cuenta
      */
-    public String userSignInUp(String userName, String userPass, String userEmail, String mAuthTokenType) throws EVEHttpException, Exception
+    public AuthResponse userSignInUp(String userName, String userPass, String userEmail, String mAuthTokenType) throws EVEHttpException, Exception
     {
         GestorComunicacionesREST gcREST = new GestorComunicacionesREST(GestorComunicacionesREST.SERVER_IP, GestorComunicacionesREST.SERVER_PORT_SSL, context);
         return gcREST.userSignInUp(userName, userPass, userEmail, mAuthTokenType);

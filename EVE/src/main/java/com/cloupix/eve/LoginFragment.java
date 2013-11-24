@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class LoginFragment extends Fragment{
 
@@ -141,6 +141,6 @@ public class LoginFragment extends Fragment{
     public static interface LoginFragmentCallbacks {
 
         // Llamado cuando el boton de la actionBar sendLogin es pulsado
-        void onLoginFragmentSubmit(String userName, String userPass);
+        void onLoginFragmentSubmit(String userEmail, String userPass);
     }
 }

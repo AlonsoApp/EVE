@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -15,10 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.cloupix.eve.logic.ImageLogic;
+
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class SigninupOneFragment extends Fragment {
 
@@ -35,6 +39,8 @@ public class SigninupOneFragment extends Fragment {
 
     private EditText editTextSigninupUserName;
     private ImageButton imgBtnProfileImage;
+
+    private Bitmap profileBitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,9 +102,17 @@ public class SigninupOneFragment extends Fragment {
         imgBtnProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signinupOneCallbacks.onImageButtonClicked();
+                signinupOneCallbacks.onImageButtonClicked(imgBtnProfileImage);
             }
         });
+
+        profileBitmap = ((AuthenticatorActivity) getActivity()).getProfileBitmap();
+        // Restauramos el bitmap
+        if(profileBitmap!=null){
+            // Lo recortamos
+            ImageLogic imageLogic = new ImageLogic(getActivity().getApplicationContext());
+            imgBtnProfileImage.setImageBitmap(imageLogic.getRoundedCornerBitmap(profileBitmap));
+        }
     }
 
     @Override
@@ -176,7 +190,7 @@ public class SigninupOneFragment extends Fragment {
     public static interface SigninupOneCallbacks {
 
         // Llamado cuando el boton de seleccion de imagen de ususario es pulsado
-        void onImageButtonClicked();
+        void onImageButtonClicked(ImageView imageView);
 
         // Llamado cuando el boton next del action bar se ha clicado
         void onNextButtonClicked(String userName);

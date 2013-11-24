@@ -57,5 +57,15 @@
     <string name="tag_fragment_signinup_one">tag_fragment_signinup_one</string>
     <string name="msg_password_pequenya">Contraseña demasiado pequeña</string>
     <string name="tag_fragment_signinup_two">tag_fragment_signinup_two</string>
+    <string name="error_image_null">Error al cargar imagen</string>
+    <string name="error_crop_app_not_found">No se ha encontrado ninguna app de recorte</string>
+    <string name="msg_elige_crop_app">Elige aplicación para recortar</string>
+    <string name="msg_completar_accion">Completar usando</string>
+    <string name="msg_elige_imagen">Selecciona imagen</string>
+
+    <array name="array_input_imagen">
+        <item>Cámara</item>
+        <item>Galería</item>
+    </array>
 
 </resources>

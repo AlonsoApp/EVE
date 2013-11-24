@@ -3,7 +3,6 @@ package com.cloupix.eve;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -11,7 +10,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,13 +22,17 @@ import android.widget.Toast;
 import com.cloupix.eve.authentication.Authenticator;
 import com.cloupix.eve.logic.SharedPreferencesManager;
 
+/**
+ * Created by AlonsoApp on 12/11/13.
+ */
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     // Estos atributos valen para especificar que fragment se tiene que abrir cuando salte el evento {@link #onNavigationDrawerItemSelected()}
-    private static final int STREAM = 0;
-    private static final int MIS_LISTAS = 1;
-    private static final int ADMINISTRAR = 2;
-    private static final int BUSCAR = 3;
+    public static final int PROFILE = 0;
+    public static final int STREAM = 1;
+    public static final int MIS_LISTAS = 2;
+    public static final int ADMINISTRAR = 3;
+    public static final int BUSCAR = 4;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -40,13 +45,14 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     private CharSequence mTitle;
     private SharedPreferencesManager sharedPreferencesManager;
     private String authToken;
-
+    private LruCache<String, Bitmap> mMemoryCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setUpCache();
         cargarPreferencias();
         manageAccounts();
 
@@ -55,7 +61,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mMemoryCache);
     }
 
     //Este metodo es el que se ejecuta cuando se clica un elemento
@@ -129,6 +135,23 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
                 mTitle = getString(R.string.title_section4);
                 break;
         }
+    }
+
+    public void setUpCache()
+    {
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 8;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes rather than
+                // number of items.
+                return (bitmap.getRowBytes() * bitmap.getHeight()) / 1024;
+            }
+        };
     }
 
     public void restoreActionBar() {

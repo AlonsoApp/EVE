@@ -1,7 +1,7 @@
 package com.cloupix.eve;
 
 /**
- * Created by AlonsoUSA on 11/11/13.
+ * Created by AlonsoApp on 11/11/13.
  */
 
 import android.app.Activity;

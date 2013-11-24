@@ -3,8 +3,9 @@ package com.cloupix.eve.network;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 
+import com.cloupix.eve.R;
+import com.cloupix.eve.business.AuthResponse;
 import com.cloupix.eve.business.exceptions.EVEHttpException;
 
 import org.apache.http.HttpEntity;
@@ -12,17 +13,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class GestorComunicacionesREST
 {
@@ -32,6 +30,7 @@ public class GestorComunicacionesREST
 
     public static String SERVER_IP = "82.223.247.186";
     public static String SERVER_PORT_SSL = "443";
+    public static String SERVER_PORT = "80";
 
     private static String HTTP = "http://";
     private static String HTTPS = "https://";
@@ -46,26 +45,48 @@ public class GestorComunicacionesREST
         this.context = context;
     }
 
-    public String userLogin(String userName, String userPass, String authTokenType)throws EVEHttpException, Exception
+    public AuthResponse userLogin(String userName, String userPass, String authTokenType)throws EVEHttpException, Exception
     {
         String str_url_query = url + "/getUserToken/"+sanearString(userName)+"/"+sanearString(userPass)+"/"+sanearString(authTokenType);
+
+        // Mago de Oz
+        return new AuthResponse(
+                0,
+                "Iñigo Alonso",
+                "AlonsoApp@gmail.com",
+                "AC057B",
+                0L
+        );
+
+        /* TODO: Descomentar esto cuando no hagamos Mago de Oz
         String jsonString = getJSON(str_url_query);
 
         JSONObject jsonObject = new JSONObject(jsonString);
         String token = jsonObject.getString("Token");
 
-        return token;
+        return token;*/
     }
 
-    public String userSignInUp(String userName, String userPass, String userEmail, String authTokenType)throws EVEHttpException, Exception
+    public AuthResponse userSignInUp(String userName, String userPass, String userEmail, String authTokenType)throws EVEHttpException, Exception
     {
         String str_url_query = url + "/userSigninUp/"+sanearString(userName)+"/"+sanearString(userEmail)+"/"+sanearString(userPass)+"/"+sanearString(authTokenType);
+
+        // Mago de Oz
+        return new AuthResponse(
+                0,
+                "Iñigo Alonso",
+                "AlonsoApp@gmail.com",
+                "AC057B",
+                0L
+        );
+
+        /* TODO: Descomentar esto cuando no hagamos Mago de Oz
         String jsonString = getJSON(str_url_query);
 
         JSONObject jsonObject = new JSONObject(jsonString);
         String token = jsonObject.getString("Token");
 
-        return token;
+        return token;*/
     }
 
     /*
@@ -105,6 +126,10 @@ public class GestorComunicacionesREST
 
     public Bitmap getImage(String type, String quality, String id) throws Exception
     {
+
+        return BitmapFactory.decodeResource(context.getResources(), R.drawable.deleteme_profile);
+        //TODO: Descomentar esto cuando no hagamos Mago de Oz
+    /*
         this.url = url + "/getImage/"+type+"/"+quality+"/"+id;
         Bitmap bitmap = null;
 
@@ -119,7 +144,19 @@ public class GestorComunicacionesREST
         if (response instanceof Bitmap) {
             bitmap = (Bitmap)response;
         }
-        return bitmap;
+        return bitmap;*/
+    }
+
+    private void enableHttpResponseCache() {
+        try {
+            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+            File httpCacheDir = new File(context.getCacheDir(), "http");
+            Class.forName("android.net.http.HttpResponseCache")
+                    .getMethod("install", File.class, long.class)
+                    .invoke(null, httpCacheDir, httpCacheSize);
+        } catch (Exception httpResponseCacheNotAvailable) {
+            //Log.d(TAG, "HTTP response cache is unavailable.");
+        }
     }
 
     private String sanearString(String strSucio){
@@ -131,7 +168,6 @@ public class GestorComunicacionesREST
 
     private String getJSON(String str_url_query) throws EVEHttpException, Exception
     {
-        Bundle bundle = new Bundle();
         StringBuilder builder = new StringBuilder();
         DefaultHttpClient client;
         //--------- HTTPS ----------- //TODO: Descoemntar esto cuando este listo el certificado y lo almacenemos en al keystore
@@ -145,7 +181,6 @@ public class GestorComunicacionesREST
         HttpResponse response = client.execute(httpGet);
         StatusLine statusLine = response.getStatusLine();
         int statusCode = statusLine.getStatusCode();
-        bundle.putInt(STATUS_CODE, statusCode);
         if (statusCode == 200)
         {
             HttpEntity entity = response.getEntity();

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class PortadaFragment extends Fragment {
 

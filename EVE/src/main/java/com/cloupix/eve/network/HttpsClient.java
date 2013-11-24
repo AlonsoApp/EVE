@@ -13,10 +13,8 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import java.io.InputStream;
 import java.security.KeyStore;
 
-import com.cloupix.eve.R;
-
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class HttpsClient extends DefaultHttpClient {
 

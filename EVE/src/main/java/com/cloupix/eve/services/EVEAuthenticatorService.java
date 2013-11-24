@@ -7,7 +7,7 @@ import android.os.IBinder;
 import com.cloupix.eve.authentication.Authenticator;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class EVEAuthenticatorService extends Service
 {

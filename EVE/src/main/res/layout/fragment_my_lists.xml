@@ -25,7 +25,7 @@
         android:textStyle="italic"
         android:textSize="25sp"
         android:layout_marginTop="70dp"
-        android:text="No hay listas"/>
+        android:text="@string/textViewNoListas"/>
 
     <TextView
         android:id="@+id/textViewCrearLista"

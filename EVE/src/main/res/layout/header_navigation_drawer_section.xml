@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="40dp"
+        android:paddingLeft="45dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_alignTop="@+id/imgProfile"
+        android:layout_alignLeft="@+id/imgProfile">
+
+        <TextView
+            android:id="@+id/textViewFullNameProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Iñigo Alonso"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:fontFamily="sans-serif-light"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+        <TextView
+            android:id="@+id/textViewEmailProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AlonsoApp@gmail.com"
+            android:textColor="#ffffff"
+            android:fontFamily="sans-serif-light"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_profile_holder"/>
+
+
+</RelativeLayout>

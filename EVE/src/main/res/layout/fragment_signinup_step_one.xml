@@ -15,7 +15,7 @@
         android:id="@+id/imgBtnProfileImage"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:background="@drawable/img_profile_holder"
+        android:background="@drawable/profile_image_holder"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
 

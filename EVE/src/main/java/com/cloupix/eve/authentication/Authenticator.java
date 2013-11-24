@@ -14,7 +14,7 @@ import com.cloupix.eve.AuthenticatorActivity;
 import com.cloupix.eve.logic.AuthenticatorLogic;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class Authenticator extends AbstractAccountAuthenticator
 {
@@ -73,7 +73,7 @@ public class Authenticator extends AbstractAccountAuthenticator
             if (password != null) {
                 AuthenticatorLogic authLogic = new AuthenticatorLogic(this.context);
                 try {
-                    authToken = authLogic.userLogin(account.name, password, authTokenType);
+                    authToken = authLogic.userLogin(account.name, password, authTokenType).getUserToken();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

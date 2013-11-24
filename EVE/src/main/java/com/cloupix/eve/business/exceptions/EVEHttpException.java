@@ -3,7 +3,7 @@ package com.cloupix.eve.business.exceptions;
 import org.apache.http.HttpException;
 
 /**
- * Created by AlonsoUSA on 16/11/13.
+ * Created by AlonsoApp on 16/11/13.
  */
 public class EVEHttpException extends HttpException
 {
