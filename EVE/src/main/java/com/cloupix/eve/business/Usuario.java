@@ -1,21 +1,30 @@
 package com.cloupix.eve.business;
 
+import java.io.Serializable;
+
 /**
  * Created by AlonsoApp on 24/11/13.
  */
-public class AuthResponse {
+public class Usuario implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
     private long userId;
     private String userFullName;
     private String userEmail;
-    private String userToken;
     private long userProfileImageId;
 
+    public Usuario() {
+        this.userId = -1L;
+        this.userFullName = "";
+        this.userEmail = "";
+        this.userProfileImageId = -1L;
+    }
 
-    public AuthResponse(long userId, String userFullName, String userEmail, String userToken, long userProfileImageId) {
+    public Usuario(long userId, String userFullName, String userEmail, long userProfileImageId) {
         this.userId = userId;
         this.userFullName = userFullName;
         this.userEmail = userEmail;
-        this.userToken = userToken;
         this.userProfileImageId = userProfileImageId;
     }
 
@@ -49,14 +58,6 @@ public class AuthResponse {
 
     public void setUserProfileImageId(long userProfileImageId) {
         this.userProfileImageId = userProfileImageId;
-    }
-
-    public String getUserToken() {
-        return userToken;
-    }
-
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
     }
 
     // Guarda en la tabla ususario de la BD toda la información

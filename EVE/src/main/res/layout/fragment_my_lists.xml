@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:id="@+id/my_lists_fragment"
     tools:context=".MainActivity$MyListsFragment" >
 
@@ -16,30 +15,47 @@
         android:fadeScrollbars="true"
         android:visibility="gone"/>
 
-    <TextView
-        android:id="@+id/textViewNoListas"
+
+    <LinearLayout
+        android:id="@+id/layoutNoListas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:fontFamily="sans-serif-thin"
-        android:textStyle="italic"
-        android:textSize="25sp"
-        android:layout_marginTop="70dp"
-        android:text="@string/textViewNoListas"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/textViewCrearLista"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="35sp"
-        android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/eve_clickable_background"
-        android:text="@string/textViewCrearLista"
-        android:clickable="true"/>
+        <TextView
+            android:id="@+id/textViewNoListas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="sans-serif-thin"
+            android:textStyle="italic"
+            android:textSize="25sp"
+            android:layout_marginTop="70dp"
+            android:text="@string/textViewNoListas"/>
+
+        <TextView
+            android:id="@+id/textViewCrearLista"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="35sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/eve_clickable_background"
+            android:text="@string/textViewCrearLista"
+            android:clickable="true"
+            android:onClick="onClick"/>
+
+        </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarListas"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"/>
 
 
 
-</LinearLayout>
+</RelativeLayout>

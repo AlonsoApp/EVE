@@ -39,6 +39,14 @@
     <!-- Errores -->
     <string name="error_401">Usuario o contraseña incorrectos</string>
     <string name="error_412">Ya existe una cuenta asociada a ese correo</string>
+    <string name="error_400">Error en la comunicación. El comando enviado no ha sido reconocido por el servidor</string>
+    <string name="error_402">Ya existe una cuenta asociada a ese email</string>
+    <string name="error_500">Error desconocido en el servidor</string>
+    <string name="error_600">Error desconocido</string>
+    <string name="error_403">Actualmente esta cuenta no tiene acceso a la aplicación.</string>
+
+    <string name="error_501">Error de comunicación con el servidor</string>
+
     <string name="error_carga_ofertas">Error al cargar ofertas</string>
 
 
@@ -62,10 +70,54 @@
     <string name="msg_elige_crop_app">Elige aplicación para recortar</string>
     <string name="msg_completar_accion">Completar usando</string>
     <string name="msg_elige_imagen">Selecciona imagen</string>
+    <string name="profile_new_password_text">Password</string>
+    <string name="logout">Logout</string>
+    <string name="label_profile_activity">Profile</string>
+    <string name="done">GUARDAR</string>
+    <string name="ya_existe_email">Ya existe email</string>
+    <string name="msg_ya_existe_email">Lo sentimos, actualmente ya existe una cuenta asociada a ese email. Introduce de nuevo otro email además de otros cambios que hayas realizado en tu perfil.</string>
+    <string name="cambios_no_realizados">Cambios no realizados</string>
+    <string name="guardado_correctamente">Guardado correctamente</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="msg_seguro_salir">¿Estás seguro de que deseas deslogearte de esta cuenta?</string>
+    <string name="titulo">Título</string>
+    <string name="colaboraciones_usuario">Colaboraciones por usuario:</string>
+    <string name="max_num_votos">Máximo número de votos:</string>
+    <string name="default_num_colaboraciones">0</string>
+    <string name="default_max_votos">1</string>
+    <string name="privado">Privado</string>
+    <string name="publico">Público</string>
+    <string name="crear">CREAR</string>
+    <string name="label_nueva_lista_activity">Nueva Lista</string>
+    <string name="msg_fullname_vacio">No puedes tener un nombre vacío</string>
+    <string name="msg_email_vacio">Debes especificar un email</string>
+    <string name="msg_email_valido">Debes introducir un email válido</string>
+    <string name="invitados">Invitados</string>
+    <string name="elemento_sin_titulo">Elemento si titulo</string>
+    <string name="nuevo_elemento">Nuevo Elemento</string>
+    <string name="no_titulo">Debes introducir un título</string>
 
     <array name="array_input_imagen">
         <item>Cámara</item>
         <item>Galería</item>
     </array>
+
+    <array name="array_input_imagen_borrar">
+        <item>Cámara</item>
+        <item>Galería</item>
+        <item>Eliminar Imagen</item>
+    </array>
+
+    <string-array name="array_privacidad">
+        <item>Pública</item>
+        <item>Semi Pública</item>
+        <item>Semi Privada</item>
+        <item>Privada</item>
+    </string-array>
+
+    <string-array name="array_colaboracion">
+        <item>Colaborativa</item>
+        <item>No colaborativa</item>
+    </string-array>
 
 </resources>

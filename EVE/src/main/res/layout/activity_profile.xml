@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="#ededed"
+    android:orientation="vertical"
+    tools:context=".ProfileActivity">
+
+    <ImageButton
+        android:id="@+id/imgBtnProfileImage"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/profile_image_holder"
+        android:scaleType="centerCrop"
+        android:onClick="onClick"
+        android:adjustViewBounds="true"/>
+
+    <EditText
+        android:id="@+id/editTextProfileUserFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:inputType="textCapWords"
+        android:layout_below="@+id/imgBtnProfileImage"
+        android:hint="@string/login_full_name_hint"/>
+
+    <EditText
+        android:id="@+id/editTextProfileUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:gravity="center"
+        android:layout_below="@+id/editTextProfileUserFullName"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/login_email_hint"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextProfileUserEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="7dp"
+            android:text="@string/profile_new_password_text"/>
+
+        <EditText
+            android:id="@+id/editTextProfilePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:inputType="textPassword"
+            android:hint="@string/login_password_hint"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="#ededed"
+        android:textSize="22sp"
+        android:background="@drawable/btn_logout_holo_red"
+        android:onClick="onClick"
+        android:text="@string/logout"/>
+
+</RelativeLayout>

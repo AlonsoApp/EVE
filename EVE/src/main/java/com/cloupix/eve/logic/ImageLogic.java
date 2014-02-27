@@ -1,7 +1,8 @@
 package com.cloupix.eve.logic;
 
 import com.cloupix.eve.R;
-import com.cloupix.eve.network.GestorComunicacionesREST;
+import com.cloupix.eve.business.exceptions.EveHttpException;
+import com.cloupix.eve.network.GestorComunicacionesTCP;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,9 +22,6 @@ import android.widget.Toast;
  */
 public class ImageLogic
 {
-    public static String TYPE_PROFILE = "profile";
-    public static String QUALITY_SD = "sd";
-    public static String QUALITY_HD = "hd";
 
 
     public static int TYPE_SQUARE = 0;
@@ -37,47 +35,6 @@ public class ImageLogic
 		this.context = context;
 	}
 
-    /**
-     * Metodo que asigna una imagen de nombre imageType_imageQuality_imageId a un imageView
-     *
-     * @param imageView La view donde se mostrara la imagen que carguemos
-     * @param memoryCache La cache de memoria de la activity para no descargar (o cargar de disco) las imagenes que tenemos que acabamos de cargar
-     * @param viewType Indicamos si queremos que la imagen se visualize cuadrada o rendonda.
-     * @param imageType Tipo de la imagen: Profile, List, List Background...
-     * @param imageQuality Calidad de la imagen que queremos
-     * @param imageId El id de imagen
-     */
-    public void getImage(final ImageView imageView, LruCache<String, Bitmap> memoryCache, final int viewType, String imageType, String imageQuality, String imageId){
-        mMemoryCache = memoryCache;
-
-        new AsyncTask<String, Void, Bitmap>(){
-
-            @Override
-            protected Bitmap doInBackground(String... params) {
-                Bitmap bitmap = null;
-                try{
-                    bitmap = getBitmap(params[0], params[1], params[2]);
-                    // Si es redondo lo redondeamos
-                    if(viewType==TYPE_ROUND)
-                        bitmap = getRoundedCornerBitmap(bitmap);
-                }catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-                return bitmap;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                if(result!=null)
-                {
-                    imageView.setImageBitmap(result);
-                }else{
-                    Toast.makeText(context, context.getString(R.string.error_image_null), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }.execute(imageType, imageQuality, imageId);
-    }
 
     /**
      * Metodo que asigna devuelve un bitmap de nombre imageType_imageQuality_imageId
@@ -102,9 +59,13 @@ public class ImageLogic
             boolean existeCacheDisco = false;
 
             if(!existeCacheDisco){
+                /*// Sustituido por GestorComunicacionesTCP
                 GestorComunicacionesREST gcREST = new GestorComunicacionesREST(GestorComunicacionesREST.SERVER_IP, GestorComunicacionesREST.SERVER_PORT, context);
                 bitmap = gcREST.getImage(type, quality, String.valueOf(id));
-                addBitmapToMemoryCache(imageKey, bitmap);
+                */
+                //GestorComunicacionesTCP gcTCP = new GestorComunicacionesTCP(GestorComunicacionesTCP.SERVER_IP, GestorComunicacionesTCP.SERVER_PORT, context);
+                //bitmap = gcTCP.getImage(type, quality, String.valueOf(id));
+                //addBitmapToMemoryCache(imageKey, bitmap);
             }
         }
         return bitmap;
@@ -170,6 +131,19 @@ public class ImageLogic
 
     private void uploadBitmap(Bitmap bitmap, String type, String quality, long id, String userEmail, String userToken){
 
+    }
+
+    public void uploadBitmapById(Bitmap bitmap, long idImagen,  String userEmail, String userToken) throws EveHttpException, Exception{
+        GestorComunicacionesTCP gcTCP = new GestorComunicacionesTCP(GestorComunicacionesTCP.SERVER_IP, GestorComunicacionesTCP.SERVER_PORT);
+        try{
+            gcTCP.uploadBitmapById(bitmap, idImagen, userEmail, userToken, context);
+        }catch (EveHttpException e){
+            throw e;
+        }catch (Exception e){
+            throw e;
+        }finally {
+            gcTCP.desconectar();
+        }
     }
 
     private void save(Bitmap bitmap, String type, String quality, long id){

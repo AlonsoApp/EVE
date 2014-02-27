@@ -27,6 +27,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textStyle="bold"
         android:textSize="22sp"
+        android:inputType="textCapWords"
         android:gravity="center_horizontal"
         android:hint="@string/login_full_name_hint"/>
 

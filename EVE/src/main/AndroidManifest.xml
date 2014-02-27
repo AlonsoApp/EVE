@@ -32,7 +32,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <service android:name="com.cloupix.eve.services.EVEAuthenticatorService" >
+        <service android:name=".services.EveAuthenticatorService" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -56,6 +56,16 @@
         <activity
             android:name="com.cloupix.eve.AuthenticatorActivity"
             android:label="@string/label_authenticator_activity" >
+        </activity>
+
+        <activity
+            android:name="com.cloupix.eve.ProfileActivity"
+            android:label="@string/label_profile_activity" >
+        </activity>
+
+        <activity
+            android:name="com.cloupix.eve.NuevaListaActivity"
+            android:label="@string/label_nueva_lista_activity" >
         </activity>
 
     </application>

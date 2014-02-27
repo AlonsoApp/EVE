@@ -10,13 +10,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 import android.widget.Toast;
 
 import com.cloupix.eve.authentication.Authenticator;
@@ -25,7 +24,7 @@ import com.cloupix.eve.logic.SharedPreferencesManager;
 /**
  * Created by AlonsoApp on 12/11/13.
  */
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, View.OnClickListener {
 
     // Estos atributos valen para especificar que fragment se tiene que abrir cuando salte el evento {@link #onNavigationDrawerItemSelected()}
     public static final int PROFILE = 0;
@@ -45,23 +44,20 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     private CharSequence mTitle;
     private SharedPreferencesManager sharedPreferencesManager;
     private String authToken;
-    private LruCache<String, Bitmap> mMemoryCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpCache();
         cargarPreferencias();
         manageAccounts();
-
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mMemoryCache);
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
     //Este metodo es el que se ejecuta cuando se clica un elemento
@@ -70,6 +66,12 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         switch(position){
+            case PROFILE:
+                // Profile
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                startActivity(intent);
+                break;
+
             case STREAM:
                 // Stream
                 fragmentManager.beginTransaction().replace(R.id.mainContainer, PlaceholderFragment.newInstance(position)).commit();
@@ -137,23 +139,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
     }
 
-    public void setUpCache()
-    {
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = maxMemory / 8;
-
-        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap) {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
-                return (bitmap.getRowBytes() * bitmap.getHeight()) / 1024;
-            }
-        };
-    }
-
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -185,7 +170,8 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             case R.id.action_settings:
                 return true;
             case R.id.action_nuevo:
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.action_nuevo), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NuevaListaActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_notificaciones:
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.action_notificaciones), Toast.LENGTH_SHORT).show();
@@ -250,4 +236,13 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.textViewCrearLista:
+                Intent intent = new Intent(getApplicationContext(), NuevaListaActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }

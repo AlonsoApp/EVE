@@ -9,7 +9,7 @@ import com.cloupix.eve.authentication.Authenticator;
 /**
  * Created by AlonsoApp on 16/11/13.
  */
-public class EVEAuthenticatorService extends Service
+public class EveAuthenticatorService extends Service
 {
 
     @Override

@@ -4,9 +4,7 @@ package com.cloupix.eve;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.util.LruCache;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
@@ -26,7 +24,8 @@ import android.widget.TextView;
 
 import com.cloupix.eve.business.NavigationDrawerSection;
 import com.cloupix.eve.business.adapters.NavigationDrawerAdapter;
-import com.cloupix.eve.logic.ImageLogic;
+import com.cloupix.eve.logic.SharedPreferencesManager;
+import com.cloupix.eve.logic.UsuarioLogic;
 
 import java.util.ArrayList;
 
@@ -69,7 +68,9 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
-    private LruCache<String, Bitmap> mMemoryCache;
+    // Header
+    private ImageView imgViewProfile;
+    private TextView textViewFullName, textViewEmail;
 
     public NavigationDrawerFragment() {
     }
@@ -125,20 +126,31 @@ public class NavigationDrawerFragment extends Fragment {
         // Renderizamos el layout para sacar el view
         View viewHeader = inflater.inflate(R.layout.header_navigation_drawer_section, null);
         // Declaramos los elementos del view
-        ImageView imgProfile = (ImageView) viewHeader.findViewById(R.id.imgProfile);
-        TextView textViewFullName = (TextView) viewHeader.findViewById(R.id.textViewFullNameProfile);
-        TextView textViewEmail = (TextView) viewHeader.findViewById(R.id.textViewEmailProfile);
-
-        // Rellenamos de contenido los elementos
-        ImageLogic imageLogic = new ImageLogic(getActivity().getApplicationContext());
-        imageLogic.getImage(imgProfile, mMemoryCache, ImageLogic.TYPE_ROUND, ImageLogic.TYPE_PROFILE, ImageLogic.QUALITY_SD, Integer.toString(1));
-
-
+        imgViewProfile = (ImageView) viewHeader.findViewById(R.id.imgProfile);
+        textViewFullName = (TextView) viewHeader.findViewById(R.id.textViewFullNameProfile);
+        textViewEmail = (TextView) viewHeader.findViewById(R.id.textViewEmailProfile);
 
         // TODO: Hacer una query a la BD preguntando por el nombre de usuario, si es "" se lanzará una AsynkTask para preguntarselo al servidor
 
 
         mDrawerListView.addHeaderView(viewHeader);
+    }
+
+    @Override
+    public void onResume() {
+        // Actualizamos la header
+        if(imgViewProfile!=null && textViewFullName!=null && textViewEmail!=null){
+            SharedPreferencesManager spm = new SharedPreferencesManager(getActivity().getApplicationContext());
+            String userEmail = spm.getAccountUserName();
+            String userFullName = spm.getUserFullName();
+            textViewFullName.setText(userFullName);
+            textViewEmail.setText(userEmail);
+
+            UsuarioLogic usuarioLogic = new UsuarioLogic();
+            usuarioLogic.fillNavigationHeaderInfo(textViewFullName, textViewEmail, imgViewProfile, getActivity().getApplicationContext());
+        }
+
+        super.onResume();
     }
 
     public boolean isDrawerOpen() {
@@ -150,10 +162,8 @@ public class NavigationDrawerFragment extends Fragment {
      *
      * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
-     * @param mMemoryCache La cache de memoria de la activity para reciclar imagenes rapido
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, LruCache<String, Bitmap> mMemoryCache) {
-        mMemoryCache = mMemoryCache;
+    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;

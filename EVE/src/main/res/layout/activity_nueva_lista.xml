@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ededed"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    tools:context=".NuevaListaActivity" >
+
+    <ListView
+        android:id="@+id/listElementos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutInputs"/>
+
+    <RelativeLayout
+        android:id="@+id/layoutInputs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="@android:color/white">
+
+        <EditText
+            android:id="@+id/editTextTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:inputType="textCapSentences"
+            android:hint="@string/titulo"/>
+
+        <Spinner
+            android:id="@+id/spinnerPrivacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/editTextTitulo" />
+
+        <Spinner
+            android:id="@+id/spinnerColaboracion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/spinnerPrivacidad" />
+
+        <TextView
+            android:id="@+id/txtViewNumColavoraciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:layout_below="@+id/spinnerColaboracion"
+            android:text="@string/colaboraciones_usuario"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/editTextNumColavoraciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txtViewNumColavoraciones"
+            android:layout_alignParentRight="true"
+            android:inputType="number"
+            android:text="@string/default_num_colaboraciones"/>
+
+        <TextView
+            android:id="@+id/txtViewMaxVotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:layout_below="@+id/txtViewNumColavoraciones"
+            android:text="@string/max_num_votos"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/editTextMaxVotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txtViewMaxVotos"
+            android:layout_alignParentRight="true"
+            android:inputType="number"
+            android:text="@string/default_max_votos"/>
+
+        <CheckBox
+            android:id="@+id/checkBoxVotoPrivado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Voto Privado"
+            android:layout_below="@id/txtViewMaxVotos"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@id/checkBoxVotoPrivado"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:layout_below="@+id/layoutInputs"
+        android:background="@drawable/shade"/>
+
+
+</RelativeLayout>

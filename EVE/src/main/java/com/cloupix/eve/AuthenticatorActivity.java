@@ -29,10 +29,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cloupix.eve.authentication.Authenticator;
-import com.cloupix.eve.business.AuthResponse;
 import com.cloupix.eve.business.CropOption;
+import com.cloupix.eve.business.UsuarioCompleto;
 import com.cloupix.eve.business.adapters.CropOptionAdapter;
-import com.cloupix.eve.business.exceptions.EVEHttpException;
+import com.cloupix.eve.business.exceptions.EveHttpException;
 import com.cloupix.eve.logic.AuthenticatorLogic;
 import com.cloupix.eve.logic.ImageLogic;
 import com.cloupix.eve.logic.SharedPreferencesManager;
@@ -73,6 +73,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
     //--------- ImageSelectionWithCrop -------
 
     public static String ARG_USER_PASS = "arg_user_pass";
+    public static String ARG_USER_FULL_NAME = "arg_user_full_name";
+    public static String ARG_USER_ID = "arg_user_id";
+    public static String ARG_USER_PROFILE_IMAGE_ID = "arg_user_profile_image_id";
     public static String ARG_IS_ADDING_NEW_ACCOUNT = "arg_is_adding_new_account";
     public static String COMES_FROM_MAIN_ACTIVITY = "comes_from_main_activity";
     public static String ARG_ACCOUNT_TYPE = "account_type";
@@ -242,7 +245,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             private final ProgressDialog dialog = new ProgressDialog(AuthenticatorActivity.this);
             private int statusCode = 0;
             private boolean errorOcurred = false;
-            private AuthResponse authResponse;
+            private UsuarioCompleto usuarioCompleto;
 
             @Override
             protected void onPreExecute() {
@@ -255,41 +258,39 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
             @Override
             protected Intent doInBackground(Void... params) {
 
-                AuthenticatorLogic authLogic = new AuthenticatorLogic(getApplicationContext());
+                AuthenticatorLogic authLogic = new AuthenticatorLogic(AuthenticatorActivity.this);
                 try {
                     // Dependiendo del submitType hacemos una cosa u otra
                     if(submitType == SUBMIT_LOGIN){
-                        authResponse = authLogic.userLogin(userEmail, userPass, Authenticator.AUTH_TOKEN_TYPE);
+                        usuarioCompleto = authLogic.userLogin(userEmail, userPass, Authenticator.AUTH_TOKEN_TYPE);
                     }else{
-                        authResponse = authLogic.userSignInUp(userEmail, userPass, userFullName, Authenticator.AUTH_TOKEN_TYPE);
+                        usuarioCompleto = authLogic.userSignInUp(userEmail, userPass, userFullName);
 
-                        // Enviamos la imagen al servidor y la guardamos en la cache y sd
-                        if(profileBitmap!=null && authResponse!=null){
+                        // Si existe una imagen la subimos
+                        if(profileBitmap!=null && usuarioCompleto.getUserId()!=-1 && usuarioCompleto.getUserProfileImageId()!=-1){
+                            // Declaramos otro gcRest porque si hacemos los conexiones con el mismo la segunda recibe un 404 Curioso ¿Por que? Ni idea, no tengo mucho tiempo para averiguarlo
                             ImageLogic imageLogic = new ImageLogic(getApplicationContext());
-                            imageLogic.saveAndUploadProfileImage(
-                                    profileBitmap,
-                                    ImageLogic.TYPE_PROFILE,
-                                    ImageLogic.QUALITY_HD,
-                                    authResponse.getUserProfileImageId(),
-                                    authResponse.getUserEmail(),
-                                    authResponse.getUserToken());
+                            try{
+                                imageLogic.uploadBitmapById(profileBitmap, usuarioCompleto.getUserProfileImageId(), userEmail, usuarioCompleto.getUserToken());
+                            }catch (Exception e){
+                                //TODO: De momento no se hace nada con las excepciones durante el proceso de subida de la imaegn. No quiero que un fallo en al subida de la imagen cancele todo el proceso de creacion de cuenta
+                                e.printStackTrace();
+                            }
                         }
                     }
-                    // Si por algún casual el logic nos devuelve un authResponse nulo salimos de inmediato porque algo ha salido mal
-                    if(authResponse==null){
-                        errorOcurred=true;
-                        return null;
-                    }
-                    if(!TextUtils.isEmpty(authResponse.getUserToken()))
+                    if(!TextUtils.isEmpty(usuarioCompleto.getUserToken()))
                     {
                         final Intent res = new Intent();
                         res.putExtra(AccountManager.KEY_ACCOUNT_NAME, userEmail);
                         res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Authenticator.ACCOUNT_TYPE);
-                        res.putExtra(AccountManager.KEY_AUTHTOKEN, authResponse.getUserToken());
+                        res.putExtra(AccountManager.KEY_AUTHTOKEN, usuarioCompleto.getUserToken());
                         res.putExtra(ARG_USER_PASS, userPass);
+                        res.putExtra(ARG_USER_FULL_NAME, usuarioCompleto.getUserFullName());
+                        res.putExtra(ARG_USER_ID, usuarioCompleto.getUserId());
+                        res.putExtra(ARG_USER_PROFILE_IMAGE_ID, usuarioCompleto.getUserProfileImageId());
                         return res;
                     }
-                } catch (EVEHttpException ex) {
+                } catch (EveHttpException ex) {
                     statusCode = ex.getStatusCode();
                     errorOcurred=true;
                     ex.printStackTrace();
@@ -309,14 +310,37 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
                 if(!errorOcurred)
                 {
                     // Guarda en la tabla ususario de la BD toda la información
-                    authResponse.save();
+                    usuarioCompleto.save();
                     finishLogin(intent);
-                }else if(statusCode==401){
-                    Toast.makeText(getApplicationContext(), getString(R.string.error_401), Toast.LENGTH_SHORT).show();
-                }else if(statusCode==412){
-                    Toast.makeText(getApplicationContext(), getString(R.string.error_412), Toast.LENGTH_LONG).show();
                 }else{
-                    //TODO: swith de los errores
+                    switch (statusCode){
+                        case 400:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_400), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 401:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_401), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 402:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_402), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 403:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_403), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 412:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_412), Toast.LENGTH_LONG).show();
+                            break;
+                        case 500:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_500), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 501:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_501), Toast.LENGTH_SHORT).show();
+                            break;
+                        case 600:
+                            Toast.makeText(getApplicationContext(), getString(R.string.error_600), Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -355,6 +379,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         }
         SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(getApplicationContext());
         sharedPreferencesManager.setAccountUserName(accountName);
+        sharedPreferencesManager.setAccountUserFullName(intent.getStringExtra(ARG_USER_FULL_NAME));
+        sharedPreferencesManager.setAccountUserId(intent.getLongExtra(ARG_USER_ID, -1L));
+        sharedPreferencesManager.setAccountUserProfileImageId(intent.getLongExtra(ARG_USER_PROFILE_IMAGE_ID, -1L));
         finish();
     }
 
@@ -365,7 +392,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
          * a selector dialogImagePicker to display two image source options, from camera
          * ‘Take from camera’ and from existing files ‘Select from gallery’
          */
-        final String[] items = getResources().getStringArray(R.array.array_input_imagen);
+        final String[] items;
+        if(profileBitmap!=null){
+            items = getResources().getStringArray(R.array.array_input_imagen_borrar);
+        }else{
+            items = getResources().getStringArray(R.array.array_input_imagen);
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -374,57 +406,67 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) { // pick from
                 // camera
-                if (item == 0) {
-                    /**
-                     * To take a photo from camera, pass intent action
-                     * ‘MediaStore.ACTION_IMAGE_CAPTURE‘ to open the camera app.
-                     */
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                switch (item){
+                    case 0:
+                        /**
+                         * To take a photo from camera, pass intent action
+                         * ‘MediaStore.ACTION_IMAGE_CAPTURE‘ to open the camera app.
+                         */
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                    /**
-                     * Also specify the Uri to save the image on specified path
-                     * and file name. Note that this Uri variable also used by
-                     * gallery app to hold the selected image path.
-                     */
-                    /*mImageCaptureUri = Uri.fromFile(new File(Environment
-                            .getExternalStorageDirectory(), "tmp_avatar_"
-                            + String.valueOf(System.currentTimeMillis())
-                            + ".jpg"));*/
-                    mImageCaptureUri = Uri.fromFile(new File(Environment
-                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "tmp_avatar_"
-                            + String.valueOf(System.currentTimeMillis())
-                            + ".jpg"));
+                        /**
+                         * Also specify the Uri to save the image on specified path
+                         * and file name. Note that this Uri variable also used by
+                         * gallery app to hold the selected image path.
+                         */
+                        /*mImageCaptureUri = Uri.fromFile(new File(Environment
+                                .getExternalStorageDirectory(), "tmp_avatar_"
+                                + String.valueOf(System.currentTimeMillis())
+                                + ".jpg"));*/
+                        mImageCaptureUri = Uri.fromFile(new File(Environment
+                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "tmp_avatar_"
+                                + String.valueOf(System.currentTimeMillis())
+                                + ".jpg"));
 
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
+                        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 
-                    try {
-                        intent.putExtra("return-data", true);
+                        try {
+                            intent.putExtra("return-data", true);
 
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    // pick from file
-                    /**
-                     * To select an image from existing files, use
-                     * Intent.createChooser to open image chooser. Android will
-                     * automatically display a list of supported applications,
-                     * such as image gallery or file manager.
-                     */
-                    Intent intent = new Intent();
+                            startActivityForResult(intent, PICK_FROM_CAMERA);
+                        } catch (ActivityNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 1:
+                        // pick from file
+                        /**
+                         * To select an image from existing files, use
+                         * Intent.createChooser to open image chooser. Android will
+                         * automatically display a list of supported applications,
+                         * such as image gallery or file manager.
+                         */
+                        Intent intentFile = new Intent();
 
-                    intent.setType("image/*");
+                        intentFile.setType("image/*");
 
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
-                    {
-                        intent.setAction(Intent. ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        startActivityForResult(intent, PICK_FROM_FILE_KITKAT);
-                    }else{
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, getString(R.string.msg_completar_accion)), PICK_FROM_FILE);
-                    }
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
+                        {
+                            intentFile.setAction(Intent. ACTION_OPEN_DOCUMENT);
+                            intentFile.addCategory(Intent.CATEGORY_OPENABLE);
+                            startActivityForResult(intentFile, PICK_FROM_FILE_KITKAT);
+                        }else{
+                            intentFile.setAction(Intent.ACTION_GET_CONTENT);
+                            startActivityForResult(Intent.createChooser(intentFile, getString(R.string.msg_completar_accion)), PICK_FROM_FILE);
+                        }
+                        break;
+                    case 2:
+                        // Borrar imagen seleccionada
+                        profileBitmap=null;
+
+                        mImageView.setImageResource(R.drawable.profile_image_holder);
+
+                        break;
                 }
             }
         });

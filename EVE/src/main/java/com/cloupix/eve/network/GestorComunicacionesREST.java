@@ -5,8 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.cloupix.eve.R;
-import com.cloupix.eve.business.AuthResponse;
-import com.cloupix.eve.business.exceptions.EVEHttpException;
+import com.cloupix.eve.business.UsuarioCompleto;
+import com.cloupix.eve.business.exceptions.EveHttpException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -45,17 +45,18 @@ public class GestorComunicacionesREST
         this.context = context;
     }
 
-    public AuthResponse userLogin(String userName, String userPass, String authTokenType)throws EVEHttpException, Exception
+    public UsuarioCompleto userLogin(String userName, String userPass, String authTokenType)throws EveHttpException, Exception
     {
         String str_url_query = url + "/getUserToken/"+sanearString(userName)+"/"+sanearString(userPass)+"/"+sanearString(authTokenType);
 
         // Mago de Oz
-        return new AuthResponse(
+        return new UsuarioCompleto(
                 0,
                 "Iñigo Alonso",
                 "AlonsoApp@gmail.com",
+                0L,
                 "AC057B",
-                0L
+                ""
         );
 
         /* TODO: Descomentar esto cuando no hagamos Mago de Oz
@@ -67,18 +68,20 @@ public class GestorComunicacionesREST
         return token;*/
     }
 
-    public AuthResponse userSignInUp(String userName, String userPass, String userEmail, String authTokenType)throws EVEHttpException, Exception
+    public UsuarioCompleto userSignInUp(String userName, String userPass, String userEmail)throws EveHttpException, Exception
     {
-        String str_url_query = url + "/userSigninUp/"+sanearString(userName)+"/"+sanearString(userEmail)+"/"+sanearString(userPass)+"/"+sanearString(authTokenType);
+        String str_url_query = url + "/userSigninUp/"+sanearString(userName)+"/"+sanearString(userEmail);
 
         // Mago de Oz
-        return new AuthResponse(
+        return new UsuarioCompleto(
                 0,
                 "Iñigo Alonso",
                 "AlonsoApp@gmail.com",
+                0L,
                 "AC057B",
-                0L
+                ""
         );
+
 
         /* TODO: Descomentar esto cuando no hagamos Mago de Oz
         String jsonString = getJSON(str_url_query);
@@ -88,41 +91,6 @@ public class GestorComunicacionesREST
 
         return token;*/
     }
-
-    /*
-    public ArrayList<OfertaAdmin> getOfertasAdminByUserName(String userName, String token) throws EVEHttpException, Exception
-    {
-        this.url = url + "/getOfertasAdminByUserName/"+userName+"/"+token;
-        String jsonString = getJSON(this.url);
-        if(jsonString.equals("")){
-            jsonString="[]";
-        }
-        JSONArray jArray = new JSONArray(jsonString);
-        ArrayList<OfertaAdmin> lista = new ArrayList<OfertaAdmin>();
-        for (int i = 0; i < jArray.length(); i++)
-        {
-            JSONObject jsonObject = jArray.getJSONObject(i);
-            OfertaAdmin oferta = new OfertaAdmin();
-            oferta.setId(jsonObject.getInt("Id"));
-            oferta.setIdEstablecimiento(jsonObject.getInt("IdEstablecimiento"));
-            oferta.setTitulo(jsonObject.getString("Titulo"));
-            oferta.setSubTitulo(jsonObject.getString("Subtitulo"));
-            oferta.setDescripcion(jsonObject.getString("Descripcion"));
-            oferta.setTextoCompartir(jsonObject.getString("TextoCompartir"));
-            oferta.setFechaInicio(new Date(jsonObject.getLong("FechaInicio")));
-            oferta.setFechaFin(new Date(jsonObject.getLong("FechaFin")));
-            oferta.setNombreEstablecimiento(jsonObject.getString("NombreEstablecimiento"));
-            oferta.setTipo(jsonObject.getInt("Tipo"));
-            oferta.setHasImageHD(jsonObject.getInt("HasImageHD")==1);
-            oferta.setHasImageSD(jsonObject.getInt("HasImageSD")==1);
-            oferta.setLastMod(jsonObject.getLong("LastMod"));
-            oferta.setFechaPublicacion(new Date(jsonObject.getLong("FechaPublicacion")));
-            oferta.setFechaEliminacion(new Date(jsonObject.getLong("FechaEliminacion")));
-            lista.add(oferta);
-        }
-
-        return lista;
-    }*/
 
     public Bitmap getImage(String type, String quality, String id) throws Exception
     {
@@ -166,7 +134,7 @@ public class GestorComunicacionesREST
         return strLimpio;
     }
 
-    private String getJSON(String str_url_query) throws EVEHttpException, Exception
+    private String getJSON(String str_url_query) throws EveHttpException, Exception
     {
         StringBuilder builder = new StringBuilder();
         DefaultHttpClient client;
@@ -192,7 +160,7 @@ public class GestorComunicacionesREST
                 builder.append(line);
             }
         }else{
-            throw new EVEHttpException(statusCode);
+            throw new EveHttpException(statusCode);
         }
 
         return builder.toString();

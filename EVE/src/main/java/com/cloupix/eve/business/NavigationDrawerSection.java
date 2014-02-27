@@ -28,4 +28,5 @@ public class NavigationDrawerSection {
     public void setResIcon(int resIcon) {
         this.resIcon = resIcon;
     }
+
 }

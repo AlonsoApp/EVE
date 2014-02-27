@@ -19,7 +19,7 @@ import com.cloupix.eve.logic.AuthenticatorLogic;
 public class Authenticator extends AbstractAccountAuthenticator
 {
     public static String ACCOUNT_TYPE = "com.cloupix.eve";
-    public static String AUTH_TOKEN_TYPE = "1";
+    public static String AUTH_TOKEN_TYPE = "2";
 
     private Context context;
 
